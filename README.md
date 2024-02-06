@@ -27,8 +27,23 @@ Before running this project, ensure you have the following installed:
 3. Build and start the Docker containers:
    <code>docker-compose up --build</code><br>
 
-### Local
+### Without Docker
+#### Frontend setup
+1. Clone the repository: <br>
+<code>git clone https://github.com/zannn1019/BlogWebsite.git</code>
+2. Navigate to the project directory: <br>
+   <code>cd BlogWebsite</code><br>
+3. Navigate to the frontend directory: <br>
+   <code>cd nuxtjs</code><br>
+4. Install dependencies: <br>
+   <code>npm install</code><br>
+5. Start the frontend server: <br>
+   <code>npm run dev</code>
+6. Access the frontend: <br>
+   Open your browser and go to `http://localhost:3000`.
 
+
+   
 ## Features
 
 - View list of blog posts and blog categories

@@ -1,0 +1,33 @@
+version: '1.2'
+services:
+    laravel:
+        container_name: laravel
+        build: ./laravel
+        ports:
+            - 8000:8000
+    db:
+        image: postgres
+        container_name: postgres
+        volumes:
+        - ./postgresql/data:/var/lib/postgresql/data
+        ports:
+        - "5432:5432"
+        environment: 
+            POSTGRES_DB: blog_nuxlara
+            POSTGRES_USER: root 
+            POSTGRES_PASSWORD: password 
+    nuxtjs:
+        container_name: nuxtjs
+        build: ./nuxtjs
+        ports:
+            - 3000:3000
+    pgadmin:
+        image: dpage/pgadmin4
+        container_name: pgAdmin
+        ports:
+            - "5050:80"
+        depends_on:
+            - db 
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin123@gmail.com
+            PGADMIN_DEFAULT_PASSWORD: password 

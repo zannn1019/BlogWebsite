@@ -31,7 +31,7 @@ class UserController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => "The email address already used!"
-            ], 422);
+            ], 200);
         }
 
         //? Validasi request dari user
@@ -48,7 +48,7 @@ class UserController extends Controller
                 'success' => false,
                 'message' => "Something wrong",
                 "data" => $validator->errors()
-            ], 422);
+            ], 200);
         }
 
         //? Jika validasi berhasil

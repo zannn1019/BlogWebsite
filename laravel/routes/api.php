@@ -3,9 +3,7 @@
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Laravel\Passport\Passport;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,9 +24,13 @@ use Laravel\Passport\Passport;
 //     return $request->user();
 // });
 //! Route Auth (Not Working)
-Route::post('/login', [UserController::class, 'authenticate']);
 Route::post('/register', [UserController::class, 'register']);
+Route::post('/login', [UserController::class, 'authenticate']);
 Route::post("/logout", [UserController::class, 'logout']);
 
+// Route::controller(PostController::class)->group(function () {
+//     Route::get("/post", 'index');
+//     Route::get('/post/{id}', 'show');
+// });
 Route::apiResource('/post', PostController::class);
 Route::apiResource('/category', CategoryController::class);

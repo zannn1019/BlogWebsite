@@ -1,55 +1,36 @@
 <template>
-    <div class="w-full h-96 flex justify-center items-center text-center flex-col gap-6">
-        <h1 class="font-bold text-6xl">Welcome to <b class="text-teal-400">.blog</b></h1>
-        <h2 class="text-xl text-gray-400">The place where we explore new ideas, inspirations, and
-            insights together.</h2>
-    </div>
-    <div class="w-full h-screen flex flex-col my-5">
-        <header class="p-5 text-xl flex gap-5 border-b border-black">
-            <nuxt-link class="hover:underline cursor-pointer" @click=" changeCategory('All')">All</nuxt-link>
-            <div v-for="category in dataCategories">
-                <nuxt-link class="hover:underline cursor-pointer" @click="changeCategory(category.id)">
-                    {{ category }}
-                </nuxt-link>
+    <div class="flex flex-col h-full mt-20">
+        <div class="grid max-w-screen-xl h-full px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+            <div class="mr-auto place-self-center lg:col-span-7">
+                <h1
+                    class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">
+                    What Will You Discover Today? Explore Our Endless Blogosphere</h1>
+                <p class="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">Answer
+                    untold questions, uncover hidden gems, and embark on a journey of knowledge.
+                    payment stack.</p>
+                <NuxtLink to="/post"
+                    class="inline-flex items-center bg-blue-500 justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900">
+                    Browse posts
+                    <svg class="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </NuxtLink>
+                <NuxtLink to="/categories"
+                    class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
+                    See categories
+                </NuxtLink>
             </div>
-        </header>
-        <main class="w-full h-full">
-
-        </main>
+            <div class="hidden lg:mt-0 lg:col-span-5 lg:flex relative">
+                <img src="https://img-aws.ehowcdn.com/877x500p/s3-us-west-1.amazonaws.com/contentlab.studiod/getty/09f698e165f545fbb10f6c8fda98a174.jpg?type=webp"
+                    alt="mockup" class="rounded-xl shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1503220317375-aaad61436b1b?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHx8MA%3D%3D"
+                    alt="mockup" class="rounded-xl shadow-xl absolute top-16 -left-10 -z-30">
+                <img src="https://media.cnn.com/api/v1/images/stellar/prod/210104133055-beginner-gaming-pc.jpg?q=w_1110,c_fill"
+                    alt="mockup" class="rounded-xl shadow-xl absolute -top-16 left-8 -z-20">
+            </div>
+        </div>
     </div>
 </template>
-
-<script setup>
-const config = useRuntimeConfig();
-
-const category = ref('All');
-const dataCategories = ref('all');
-const dataPosts = ref(null);
-
-onMounted(async () => {
-    fetchDataCategories();
-});
-
-async function fetchDataCategories() {
-    dataCategories.value = await useFetch(`${config.public.apiBase}/api/category`);
-}
-
-// async function fetchDataCategories() {
-// }
-
-// async function fetchDataPosts() {
-//     try {
-//         dataPosts.value = await useFetch(`${config.public.apiBase}/api/category/${category.value}`);
-//     } catch (error) {
-//         console.error('Error fetching posts:', error);
-//     }
-// }
-
-// function changeCategory(categoryName) {
-//     category.value = categoryName;
-//     fetchDataPosts();
-// }
-
-// console.log(dataPosts);
-
-</script>

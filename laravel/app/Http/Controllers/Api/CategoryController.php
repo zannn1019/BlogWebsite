@@ -16,7 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return new CategoryResource(Categories::all());
+        return new CategoryResource(Categories::latest()->get());
     }
 
     /**
@@ -28,7 +28,7 @@ class CategoryController extends Controller
             "category" => ['required', 'min:3', 'unique:categories,category'],
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json($validator->errors(), 200);
         }
         $category = Categories::create($request->all());
         if ($category) {
@@ -58,7 +58,7 @@ class CategoryController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json($validator->errors(), 200);
         }
 
         $category = Categories::find($id);

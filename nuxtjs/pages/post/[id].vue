@@ -16,7 +16,8 @@
                         <button
                             class="bg-yellow-400 px-4 py-2 transition-all text-white rounded-md shadow-md hover:shadow-xl"
                             @click="handleEdit">Edit</button>
-                        <button class="bg-red-500 px-4 py-2 text-white rounded-md shadow-md hover:shadow-xl">Delete</button>
+                        <button class="bg-red-500 px-4 py-2 text-white rounded-md shadow-md hover:shadow-xl"
+                            @click="handleDelete">Delete</button>
                     </div>
                 </div>
                 <h1 class="mb-6 text-3xl font-bold py-2 px-1" :contenteditable="contenteditable"
@@ -35,11 +36,18 @@
 <script setup>
 const route = useRoute();
 const config = useRuntimeConfig();
+const toast = useToast();
 const contenteditable = ref(false);
 const { data: post, pending } = await useFetch(config.public.apiBase + '/api/post/' + route.params.id, {
     server: false,
     lazy: true
 });
+const actions = ref([{
+    color: 'red',
+    label: 'Confirm',
+    click: () => formDelete()
+}])
+
 
 const data = ref({
     thumbnail: null,
@@ -65,6 +73,22 @@ async function formEdit() {
         method: "PATCH",
         params: requestData
     });
+
+    if (request.success) {
+        toast.add({
+            title: request.message,
+            icon: 'i-heroicons-check-circle',
+            color: 'primary'
+        })
+    } else {
+        Object.keys(request).forEach((key) => {
+            toast.add({
+                title: request[key][0],
+                icon: 'i-heroicons-x-circle',
+                color: 'red'
+            })
+        });
+    }
 }
 
 
@@ -75,6 +99,38 @@ function handleEdit(e) {
     e.target.innerText = contenteditable.value ? "Done" : "Edit"
     if (!contenteditable.value) {
         formEdit();
+    }
+}
+
+function handleDelete() {
+    toast.add({
+        title: "Click confirm to delete this post!",
+        icon: 'i-heroicons-information-circle',
+        color: 'red',
+        actions
+    })
+}
+
+async function formDelete() {
+    const apiResponse = await $fetch(config.public.apiBase + "/api/post/" + route.params.id, {
+        method: "DELETE"
+    });
+
+    if (apiResponse.success) {
+        toast.add({
+            title: apiResponse.message,
+            icon: 'i-heroicons-check-circle',
+            color: 'primary'
+        })
+        return navigateTo('/post');
+    } else {
+        Object.keys(apiResponse).forEach((key) => {
+            toast.add({
+                title: apiResponse[key][0],
+                icon: 'i-heroicons-x-circle',
+                color: 'red'
+            })
+        });
     }
 }
 

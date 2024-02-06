@@ -1,15 +1,5 @@
 <template>
     <div class="flex flex-col items-center">
-        <div class="fixed flex flex-col z-50 right-0 top-0 p-5" v-if="response">
-            <template v-if="Array.isArray(response.message)">
-                <div v-for="(message, index) in response.message" :key="index">
-                    <alert :succes="response.success" :message="message" />
-                </div>
-            </template>
-            <template v-else>
-                <alert :succes="response.success" :message="response.message" v-if="response.message" />
-            </template>
-        </div>
         <div class="w-11/12 max-lg:w-full">
             <h1 class="font-semibold text-3xl mb-10">Create a post</h1>
             <form @submit.prevent="postForm" class="flex gap-5 w-full h-full flex-col" enctype="multipart/form-data">
@@ -76,7 +66,7 @@ const config = useRuntimeConfig();
 const { data: categories, pending } = await useFetch(config.public.apiBase + "/api/category", {
     server: false
 });
-
+const toast = useToast();
 const previewUrl = ref(null);
 const filename = ref(null);
 
@@ -130,15 +120,19 @@ async function postForm() {
         previewUrl.value = null;
         filename.value = null;
         response.value = apiResponse;
+        toast.add({
+            title: apiResponse.message,
+            icon: 'i-heroicons-x-circle',
+            color: 'primary'
+        })
     } else {
-        let errorMessage = [];
         Object.keys(apiResponse).forEach((key) => {
-            errorMessage.push(apiResponse[key])
+            toast.add({
+                title: apiResponse[key][0],
+                icon: 'i-heroicons-check-circle',
+                color: 'red'
+            })
         });
-        response.value = {
-            success: false,
-            message: Object.values(apiResponse).flat()
-        };
     }
 }
 </script>

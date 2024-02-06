@@ -18,7 +18,8 @@
         </div>
         <section v-else
             class="w-full h-full p-5 border-t border-black grid grid-cols-4 place-items-center gap-5 max-lg:grid-cols-2 max-sm:grid-cols-1 ">
-            <div v-for="category in categories?.categories" :key="category.id" v-auto-animate>
+            <DataNotFound v-if="categories.categories.length == 0" />
+            <div v-else v-for="category in categories.categories" :key="category.id" v-auto-animate>
                 <CategoryCards :category="category.category" :id="category.id"
                     :url="`https://source.unsplash.com/800x600/?category=${category.category}`" ref="categoryCard" />
             </div>

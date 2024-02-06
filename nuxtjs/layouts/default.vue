@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full">
+    <div class="h-screen overflow-auto block w-full">
         <LayoutsHeader />
         <div class="content p-10">
             <slot />

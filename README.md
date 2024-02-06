@@ -19,7 +19,7 @@ Before running this project, ensure you have the following installed:
 - Docker Compose
 
 ## Getting Started
-## Docker
+### Docker
 1. Clone the repository: <br>
 <code>git clone https://github.com/zannn1019/BlogWebsite.git</code>
 2. Navigate to the project directory: <br>
@@ -27,7 +27,7 @@ Before running this project, ensure you have the following installed:
 3. Build and start the Docker containers:
    <code>docker-compose up --build</code><br>
 
-## Local
+### Local
 
 ## Features
 

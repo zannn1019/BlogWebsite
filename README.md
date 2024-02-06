@@ -21,4 +21,4 @@ Before running this project, ensure you have the following installed:
 ## Getting Started
 
 1. Clone the repository:
-
+<code>git clone https://github.com/zannn1019/BlogWebsite.git</code>

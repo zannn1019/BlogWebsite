@@ -13,7 +13,6 @@ class Categories extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $with = ['posts'];
     protected $fillable = [
         'category'
     ];

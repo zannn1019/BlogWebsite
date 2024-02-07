@@ -11,6 +11,7 @@ class Post extends Model
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'string';
+    protected $with = ['category'];
 
     protected $fillable = [
         'id',
@@ -24,6 +25,6 @@ class Post extends Model
 
     public function category()
     {
-        return $this->belongsTo(Categories::class, 'id');
+        return $this->belongsTo(Categories::class, 'category_id');
     }
 }

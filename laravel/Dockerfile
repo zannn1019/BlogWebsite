@@ -1,6 +1,6 @@
-FROM php:8.2-cli
+FROM dunglas/frankenphp:1.0.3-php8.2
 
-RUN apt-get update && apt-get install -y libpq-dev curl libpng-dev libonig-dev libxml2-dev openssl && docker-php-ext-install pdo pdo_pgsql
+RUN apt-get update && apt-get install -y libpq-dev curl libpng-dev libonig-dev libxml2-dev openssl && docker-php-ext-install pdo pdo_pgsql pcntl sockets
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -10,4 +10,4 @@ COPY . .
 RUN composer install
 
 EXPOSE 8000
-CMD php artisan storage:link && php artisan serve --host=0.0.0.0 --port=8000
+CMD php artisan storage:link && php artisan octane:frankenphp

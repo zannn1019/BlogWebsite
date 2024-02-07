@@ -3,14 +3,16 @@
         class="max-w-sm bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 shadow-lg grid grid-rows-2 overflow-hidden">
         <a href="#" class="h-60 overflow-hidden">
             <NuxtImg class="rounded-t-lg h-full object-cover w-full"
-                v-bind:src="config.public.apiBase + '/storage/posts_thumbnail/' + props.images" loading="lazy"
-                :alt="props.category" />
+                v-bind:src="config.public.apiBase + '/storage/posts_thumbnail/' + (props.images == null ? 'null.jpg' : props.images)"
+                loading="lazy" :alt="props.category" />
         </a>
         <div class="p-5 border flex flex-col items-start  bg-gray-100">
             <a href="#">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white truncate max-w-72">{{
-                    props.title }}
+                <h5 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white truncate max-w-72">
+                    {{
+                        props.title }}
                 </h5>
+                <span class="mb-2  text-gray-500">{{ props.category }}</span>
             </a>
             <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 max-w-72 break-words"> {{
                 props.content.slice(0, 100) }}{{ props.content.length > 100 ? '...' : '' }}

@@ -5,12 +5,14 @@
         </div>
         <div v-else>
             <div class="mb-32 px-5 max-md:px-0">
-                <NuxtImg v-bind:src="config.public.apiBase + '/storage/posts_thumbnail/' + post.data.thumbnail"
+                <NuxtImg
+                    v-bind:src="config.public.apiBase + '/storage/posts_thumbnail/' + (post.data.thumbnail == null ? 'null.jpg' : post.data.thumbnail)"
                     class="mb-6 rounded-lg shadow-lg dark:shadow-black/20 border w-full max-h-[40em] object-cover"
                     :alt="post.data.thumbnail" />
                 <div class="mb-6 flex items-center justify-between">
                     <div>
                         <span> Published <u>{{ formatDate(post.data.created_at) }}</u></span>
+                        <h1><b>Category : </b> {{ post.data.category }}</h1>
                     </div>
                     <div class="action flex gap-1">
                         <button

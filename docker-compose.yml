@@ -2,6 +2,7 @@ version: '1.2'
 services:
     laravel:
         container_name: laravel
+        image: "ghcr.io/thecaliskan/laravel-benchmark:frankenphp"
         build: ./laravel
         ports:
             - 8000:8000

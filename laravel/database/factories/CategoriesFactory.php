@@ -19,7 +19,7 @@ class CategoriesFactory extends Factory
     {
         return [
             'id' => Str::uuid(),
-            'category' => fake()->unique()->word()
+            'category' => fake('en')->unique()->word()
         ];
     }
 }

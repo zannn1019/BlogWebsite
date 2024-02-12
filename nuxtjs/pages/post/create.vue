@@ -9,7 +9,8 @@
                         class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                         <option value="" selected>Choose a category</option>
                         <option value="" selected v-if="pending">Pending</option>
-                        <option v-else v-for="cat in categories.categories" :key="cat.id" :value="cat.id">{{ cat.category }}
+                        <option v-else v-for="cat in categories.data" :key="cat.id" :value="cat.id">{{
+                            cat.category }}
                         </option>
                     </select>
                     <span class="text-sm">or <nuxt-link to="/categories" class="underline text-blue-500">
@@ -62,6 +63,7 @@
 </template>
 
 <script setup>
+
 const config = useRuntimeConfig();
 const { data: categories, pending } = await useFetch(config.public.apiBase + "/api/category", {
     server: false
@@ -103,7 +105,6 @@ async function postForm() {
     formData.append('title', data.value.title);
     formData.append('content', data.value.content);
     formData.append('thumbnail', data.value.thumbnail);
-
     const apiResponse = await $fetch(config.public.apiBase + "/api/post", {
         method: "POST",
         body: formData,

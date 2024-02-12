@@ -6,10 +6,12 @@ use App\Models\Post;
 use Nette\Utils\Image;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\HtmlString;
 
 class PostController extends Controller
 {
@@ -92,10 +94,10 @@ class PostController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            "title" => ['min:8', 'unique:posts,title'],
+            "title" => ['min:8', Rule::unique('posts')->ignore($id)],
             'content' => ['min:30'],
             'category_id' => [],
-            'thumbnail' => []
+            'thumbnail' => ['image'],
         ]);
 
         if ($validator->fails()) {
@@ -106,13 +108,17 @@ class PostController extends Controller
         $post = Post::find($id);
 
         if ($request->hasFile('thumbnail')) {
-            return response()->json('tes', 200);
             $pathTujuan =  '/storage/posts_thumbnail/';
-            if (File::exists(public_path($pathTujuan . $post->thumbnail))) {
+            //? Hapus gambar lama jika ada
+            if ($post->thumbnail && File::exists(public_path($pathTujuan . $post->thumbnail))) {
                 File::delete(public_path($pathTujuan . $post->thumbnail));
             }
+
+            //? Simpan gambar baru dengan nama yang unik
             $file = $request->file('thumbnail');
-            $file->move(public_path($pathTujuan), $post->thumbnail);
+            $fileName = uniqid() . '_' . $file->getClientOriginalName();
+            $file->move(public_path($pathTujuan), $fileName);
+            $request['thumbnail'] = $fileName;
         }
 
         $post->update($request->all());
@@ -122,6 +128,7 @@ class PostController extends Controller
             'data' => $request->all()
         ], 200);
     }
+
 
     /**
      * Remove the specified resource from storage.

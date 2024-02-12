@@ -53,7 +53,7 @@ const showForm = ref(false);
 const toast = useToast();
 const page = ref(1);
 const config = useRuntimeConfig();
-const { data: categories, pending } = await useFetch(config.public.apiBase + "/api/category", {
+const { data: categories, pending, refresh } = await useFetch(config.public.apiBase + "/api/category", {
     query: {
         page
     },

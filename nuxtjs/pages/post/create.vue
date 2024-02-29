@@ -63,12 +63,16 @@
 </template>
 
 <script setup>
+definePageMeta({
+    middleware: ['auth']
+})
 
 const config = useRuntimeConfig();
 const { data: categories, pending } = await useFetch(config.public.apiBase + "/api/category", {
     server: false
 });
-const toast = useToast();
+
+const { $showAlert } = useNuxtApp();
 const previewUrl = ref(null);
 const filename = ref(null);
 
@@ -105,12 +109,16 @@ async function postForm() {
     formData.append('title', data.value.title);
     formData.append('content', data.value.content);
     formData.append('thumbnail', data.value.thumbnail);
+
     const apiResponse = await $fetch(config.public.apiBase + "/api/post", {
         method: "POST",
         body: formData,
+        headers: {
+            Authorization: `Bearer ${useCookie('api_token').value}`
+        }
     });
 
-
+    $showAlert(apiResponse);
     if (apiResponse.success) {
         data.value = {
             category_id: '',
@@ -121,19 +129,6 @@ async function postForm() {
         previewUrl.value = null;
         filename.value = null;
         response.value = apiResponse;
-        toast.add({
-            title: apiResponse.message,
-            icon: 'i-heroicons-x-circle',
-            color: 'primary'
-        })
-    } else {
-        Object.keys(apiResponse).forEach((key) => {
-            toast.add({
-                title: apiResponse[key][0],
-                icon: 'i-heroicons-check-circle',
-                color: 'red'
-            })
-        });
     }
 }
 </script>

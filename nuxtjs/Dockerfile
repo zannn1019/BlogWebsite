@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:20
 
 WORKDIR /var/www/html/nuxt-app
 
@@ -10,4 +10,4 @@ RUN npm install
 
 EXPOSE 3000
 
-CMD npm run dev
+CMD ["npm","run", "dev"]

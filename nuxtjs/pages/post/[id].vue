@@ -4,9 +4,8 @@
             <Loading />
         </div>
         <div v-else>
-            <div class="mb-32 px-5 max-md:px-0">
+            <div class="mb-32 px-5 max-md:px-0 pb-10">
                 <div class="w-full mb-5">
-                    <label for="title" class="block mb-2 text-xl font-medium text-gray-900">Thumbnail</label>
                     <div class="flex items-center justify-center w-full relative overflow-hidden shadow-xl rounded-xl  transition-all duration-300 h-[40em]"
                         :class="contentEditable ? 'hover:brightness-50 cursor-pointer' : 'pointer-events-none'">
                         <NuxtImg v-if="!previewUrl"
@@ -17,7 +16,7 @@
                             class="rounded-lg shadow-lg dark:shadow-black/20 border w-full h-full object-cover absolute pointer-events-none"
                             :alt="previewUrl" />
                         <label for="dropzone-file"
-                            class="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 ">
+                            class="flex flex-col items-center justify-center w- full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 ">
                             <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                 <svg class="w-8 h-8 mb-4 text-gray-500 " aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -38,6 +37,7 @@
                 <div class="mb-6 flex items-center justify-between">
                     <div>
                         <span> Published at <u>{{ formatDate(post.data.created_at) }}</u></span>
+                        <h1><b>Author</b> : {{ post.data.author }}</h1>
                         <h1><b>Category : </b> {{ post.data.category }}</h1>
                     </div>
                     <div class="action flex gap-1">
@@ -64,6 +64,7 @@
 const route = useRoute();
 const config = useRuntimeConfig();
 const toast = useToast();
+const { $showAlert } = useNuxtApp();
 const contentEditable = ref(false);
 const { data: post, pending, refresh } = await useFetch(config.public.apiBase + '/api/post/' + route.params.id, {
     server: false,
@@ -85,32 +86,20 @@ const handleInput = (event) => {
 
 const submitEdit = async () => {
     const requestData = {};
+    const formData = new FormData();
 
     Object.keys(data.value).forEach(key => {
         if (data.value[key] !== null) {
-            requestData[key] = data.value[key];
+            formData.append(requestData[key], data.value[key])
+            // requestData[key] = data.value[key];
         }
     });
 
-    const request = await $fetch(config.public.apiBase + '/api/post/' + route.params.id, {
-        method: "PATCH",
-        params: requestData
+    const request = await $fetch(config.public.apiBase + '/api/post/' + route.params.id + "?_method=PATCH", {
+        method: "POST",
+        body: requestData,
     });
-    if (request.success) {
-        toast.add({
-            title: request.message,
-            icon: 'i-heroicons-check-circle',
-            color: 'primary'
-        });
-    } else {
-        Object.keys(request).forEach((key) => {
-            toast.add({
-                title: request[key][0],
-                icon: 'i-heroicons-x-circle',
-                color: 'red'
-            })
-        });
-    }
+    $showAlert(request);
 };
 
 
@@ -175,22 +164,7 @@ const formDelete = async () => {
         method: "DELETE"
     });
 
-    if (apiResponse.success) {
-        toast.add({
-            title: apiResponse.message,
-            icon: 'i-heroicons-check-circle',
-            color: 'primary'
-        })
-        return navigateTo('/post');
-    } else {
-        Object.keys(apiResponse).forEach((key) => {
-            toast.add({
-                title: apiResponse[key][0],
-                icon: 'i-heroicons-x-circle',
-                color: 'red'
-            })
-        });
-    }
+    $showAlert(apiResponse);
 };
 
 const formatDate = (date) => {

@@ -16,21 +16,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-//! Route Auth (Not Working)
+//? Route Auth
 Route::post('/register', [UserController::class, 'register']);
-Route::post('/login', [UserController::class, 'authenticate']);
+Route::post('/login', [UserController::class, 'login']);
 Route::post("/logout", [UserController::class, 'logout']);
 
-// Route::controller(PostController::class)->group(function () {
-//     Route::get("/post", 'index');
-//     Route::get('/post/{id}', 'show');
-// });
-Route::apiResource('/post', PostController::class);
-Route::apiResource('/category', CategoryController::class);
+//? Rute untuk PostController
+Route::resource('post', PostController::class)->only(['index', 'show']);
+
+//? Rute untuk yang memerlukan autentikasi
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('category', CategoryController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('post', PostController::class)->only(['store', 'update', 'destroy']);
+});
+
+//? Rute untuk yang tidak memerlukan autentikasi
+Route::resource('category', CategoryController::class)->only(['index', 'show']);
+Route::resource('post', PostController::class)->only(['index', 'show']);
+
+
+//? Rute tanpa middleware
+// Route::resource('post', PostController::class);
+// Route::resource('category', CategoryController::class);

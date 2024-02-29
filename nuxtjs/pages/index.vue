@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-col h-full mt-20">
-        <div class="grid max-w-screen-xl h-full px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
-            <div class="mr-auto place-self-center lg:col-span-7">
+    <div class="flex flex-col h-full justify-center items-center">
+        <div class="flex gap-5 p-10">
+            <div class="mr-auto place-self-center ">
                 <h1
                     class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">
                     What Will You Discover Today? Explore Our Endless Blogosphere</h1>
@@ -23,7 +23,7 @@
                     See categories
                 </NuxtLink>
             </div>
-            <div class="hidden lg:mt-0 lg:col-span-5 lg:flex relative">
+            <div class="hidden lg:mt-0 lg:flex w-5/12 relative">
                 <img src="https://img-aws.ehowcdn.com/877x500p/s3-us-west-1.amazonaws.com/contentlab.studiod/getty/09f698e165f545fbb10f6c8fda98a174.jpg?type=webp"
                     alt="mockup" class="rounded-xl shadow-2xl">
                 <img src="https://images.unsplash.com/photo-1503220317375-aaad61436b1b?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHx8MA%3D%3D"

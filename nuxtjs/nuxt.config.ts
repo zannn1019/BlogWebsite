@@ -10,17 +10,30 @@ export default defineNuxtConfig({
       viewport: "width=device-width, initial-scale=1",
       meta: [
         {
-          name: "What is Lorem Ipsum?",
+          name: "description",
           content:
             "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
         },
       ],
     },
   },
-  modules: [ "@nuxt/image", "@pinia/nuxt",'@nuxt/ui','@formkit/auto-animate/nuxt'],
+  modules: [
+    "@nuxt/image",
+    '@nuxt/ui',
+    '@formkit/auto-animate/nuxt',
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: ['defineStore', 'acceptHMRUpdate'],
+      },
+    ],
+  ],
+  imports: {
+    dirs: ['stores'],
+  },
   runtimeConfig: {
     public: {
-      apiBase: "http://127.0.0.1:8000",
+      apiBase: "http://laravel:8000",
       imgApi: "https://pixabay.com/api/",
       imgKey: "42211442-39e4269efc52fe3580cef99d1",
     },
@@ -30,5 +43,9 @@ export default defineNuxtConfig({
   },
   colorMode: {
     preference: 'light'
-  }
+  },
+  plugins: [
+    '~/plugins/ShowAlert'
+  ],
+  ssr: false
 });

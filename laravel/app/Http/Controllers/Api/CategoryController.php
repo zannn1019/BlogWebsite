@@ -16,7 +16,15 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return CategoryResource::collection(Categories::latest()->paginate(8));
+        try {
+            return CategoryResource::collection(Categories::latest()->paginate(8));
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                "message" => $e->getMessage(),
+                'data' => []
+            ], 500);
+        }
     }
 
     /**
@@ -24,19 +32,27 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            "category" => ['required', 'min:3', 'unique:categories,category'],
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 200);
-        }
-        $category = Categories::create($request->all());
-        if ($category) {
+        try {
+            $validator = Validator::make($request->all(), [
+                "category" => ['required', 'min:3', 'unique:categories,category'],
+            ]);
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 200);
+            }
+            $category = Categories::create($request->all());
+            if ($category) {
+                return response()->json([
+                    'success' => true,
+                    "message" => "Successfully created data!",
+                    'data' => $category
+                ], 201);
+            }
+        } catch (\Exception $e) {
             return response()->json([
-                'success' => true,
-                "message" => "Successfully created data!",
-                'data' => $request->all()
-            ], 200);
+                'success' => false,
+                "message" => $e->getMessage(),
+                'data' => []
+            ], 500);
         }
     }
 
@@ -45,7 +61,15 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        return new CategoryResource(Categories::find($id));
+        try {
+            return new CategoryResource(Categories::find($id));
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                "message" => $e->getMessage(),
+                'data' => []
+            ], 500);
+        }
     }
 
     /**
@@ -53,24 +77,32 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validator = Validator::make($request->all(), [
-            "category" => ['required', 'min:3', 'unique:categories,category'],
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                "category" => ['required', 'min:3', 'unique:categories,category'],
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 200);
-        }
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 200);
+            }
 
-        $category = Categories::find($id);
-        $request['Old Category'] = $category->category;
-        $request['New Category'] = $request['category'];
-        $update = $category->update($request->all());
-        if ($update) {
+            $category = Categories::find($id);
+            $request['Old Category'] = $category->category;
+            $request['New Category'] = $request['category'];
+            $update = $category->update($request->all());
+            if ($update) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Successfully updated data!",
+                    'data' => $request->only(['Old Category', 'New Category'])
+                ], 200);
+            }
+        } catch (\Exception $e) {
             return response()->json([
-                'success' => true,
-                'message' => "Successfully updated data!",
-                'data' => $request->only(['Old Category', 'New Category'])
-            ], 200);
+                'success' => false,
+                "message" => $e->getMessage(),
+                'data' => []
+            ], 500);
         }
     }
 
@@ -79,23 +111,31 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = Categories::find($id);
-        if ($category) {
-            $category->delete();
-            return response()->json([
-                'success' => true,
-                'message' => "Data deleted successfully!",
-                'data' => $category
-            ], 200);
-        } else {
+        try {
+            $category = Categories::find($id);
+            if ($category) {
+                $category->delete();
+                return response()->json([
+                    'success' => true,
+                    'message' => "Data deleted successfully!",
+                    'data' => $category
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Cannot find the data!"
+                ], 400);
+            }
             return response()->json([
                 'success' => false,
-                'message' => "Cannot find the data!"
+                'message' => "Failed to delete data!"
             ], 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                "message" => $e->getMessage(),
+                'data' => []
+            ], 500);
         }
-        return response()->json([
-            'success' => false,
-            'message' => "Failed to delete data!"
-        ], 400);
     }
 }

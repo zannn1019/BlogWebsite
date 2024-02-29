@@ -3,76 +3,104 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function authenticate(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('API_TOKEN')->accessToken;
-            return response()->json(['token' => $token], 200);
-        } else {
-            return response()->json(['error' => 'Unauthenticated'], 401);
-        }
-    }
-
     public function register(Request $request)
     {
-        if (User::where("email", "=", $request['email'])->count()) {
-            return response()->json([
-                "success" => false,
-                "message" => "The email address already used!"
-            ], 200);
-        }
+        try {
+            $validate = Validator::make($request->all(), [
+                'name' => 'required|string|max:250',
+                'email' => 'required|string|email:rfc,dns|max:250|unique:users,email',
+                'password' => 'required|string|min:8'
+            ]);
 
-        //? Validasi request dari user
-        $validator = Validator::make($request->all(), [
-            'name' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-            'confirm_password' => ['required', 'same:password']
-        ]);
+            if ($validate->fails()) {
+                return response()->json($validate->errors(), 200);
+            }
 
-        //? Jika validasi gagal
-        if ($validator->fails()) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password)
+            ]);
+
+            $data['token'] = $user->createToken($request->email)->plainTextToken;
+            $data['user'] = $user;
+
+            $response = [
+                'success' => true,
+                'message' => 'Register successfully.',
+                'data' => $data,
+            ];
+
+            return response()->json($response, 201);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => "Something wrong",
-                "data" => $validator->errors()
+                'message' => 'Validation Error!',
+                'data' => $validate->errors(),
+            ], 200);
+        }
+    }
+
+    /**
+     * Authenticate the user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function login(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'email' => 'required|string|email',
+            'password' => 'required|string'
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validate->errors()
             ], 200);
         }
 
-        //? Jika validasi berhasil
-        $input = $request->only(['name', 'email', 'password']);
-        $user = User::create($input);
-        $token = $user->createToken('API_TOKEN')->accessToken;
+        $user = User::where('email', $request->email)->first();
 
-        //? Response
-        return response()->json([
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Wrong email or password!'
+            ], 200);
+        }
+
+        $data['token'] = $user->createToken($request->email)->plainTextToken;
+        $data['user'] = $user;
+
+        $response = [
             'success' => true,
-            'message' => 'Registration successful',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-            ],
-            'api_token' => $token
-        ], 201);
+            'message' => 'Welcome ' . $data['user']->name . '!.',
+            'data' => $data,
+        ];
+
+        return response()->json($response, 200);
     }
+
+    /**
+     * Log out the user from application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function logout(Request $request)
     {
-        $token = $request->user()->token();
-        $token->revoke();
-        $response = ['message' => 'You have been successfully logged out!'];
-        return response($response, 200);
+        auth()->user()->tokens()->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Logged out successfully'
+        ], 200);
     }
 }

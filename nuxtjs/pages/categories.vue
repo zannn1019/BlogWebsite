@@ -1,18 +1,5 @@
 <template>
     <div class="flex flex-col gap-5">
-        <div class="flex flex-col gap-2">
-            <button class="bg-green-400 px-4 py-2 self-start text-white rounded-md shadow-xl" @click="show">New
-                Category</button>
-            <form method="post" @submit.prevent="categoryForm" v-if="showForm">
-                <label for="title" class="block mb-2 text-xl font-medium text-gray-900">Category</label>
-                <div class="w-full flex gap-2">
-                    <input type="text" v-model="data.category"
-                        class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                        placeholder="Enter your category name here!" required>
-                    <button class="bg-blue-500 px-4 py-2 self-start text-white rounded-md shadow-xl">Submit</button>
-                </div>
-            </form>
-        </div>
         <div v-if="pending">
             <Loading />
         </div>
@@ -50,9 +37,10 @@
 
 <script setup>
 const showForm = ref(false);
-const toast = useToast();
+const { $showAlert } = useNuxtApp();
 const page = ref(1);
 const config = useRuntimeConfig();
+
 const { data: categories, pending, refresh } = await useFetch(config.public.apiBase + "/api/category", {
     query: {
         page
@@ -60,6 +48,7 @@ const { data: categories, pending, refresh } = await useFetch(config.public.apiB
     server: false,
     watch: [page]
 });
+
 
 function show() {
     if (showForm.value) {
@@ -82,23 +71,10 @@ async function categoryForm() {
         body: formData
     });
 
+    $showAlert(apiResponse);
     if (apiResponse.success == true) {
         data.value.category = '';
-        toast.add({
-            title: apiResponse.message,
-            icon: 'i-heroicons-check-circle',
-            color: 'primary'
-        })
         refresh()
-    } else {
-        data.value.category = '';
-        Object.keys(apiResponse).forEach((key) => {
-            toast.add({
-                title: apiResponse[key][0],
-                icon: 'i-heroicons-x-circle',
-                color: 'red'
-            })
-        });
     }
 }
 

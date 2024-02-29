@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('slug');
             $table->string('thumbnail')->nullable();
             $table->foreignUuid('category_id')->constrained('categories');
-            // $table->foreignUuid('user_id')->constrained('users');
+            $table->foreignUuid('user_id')->constrained('users');
             $table->timestamps();
         });
     }

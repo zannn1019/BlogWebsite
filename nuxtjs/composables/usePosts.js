@@ -5,7 +5,6 @@ export default function usePosts() {
   const getPosts = (pageNum) => {
     const { data: posts, pending } = useFetch(config.public.apiBase + "/api/post", {
       query: { page: pageNum },
-      server: false,
       watch: [pageNum]
     });
   }

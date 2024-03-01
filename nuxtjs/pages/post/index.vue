@@ -42,7 +42,6 @@ const { data: posts, pending } = await $fetch(config.public.apiBase + "/api/post
     query: {
         page
     },
-    server: false,
     watch: [page]
 });
 console.log(posts);

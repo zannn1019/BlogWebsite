@@ -33,7 +33,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: "http://laravel:8000",
+      apiBase: "http://192.168.18.6:8000",
       imgApi: "https://pixabay.com/api/",
       imgKey: "42211442-39e4269efc52fe3580cef99d1",
     },
@@ -47,5 +47,4 @@ export default defineNuxtConfig({
   plugins: [
     '~/plugins/ShowAlert'
   ],
-  ssr: false
 });

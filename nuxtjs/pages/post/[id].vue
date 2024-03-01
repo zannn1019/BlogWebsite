@@ -66,9 +66,7 @@ const config = useRuntimeConfig();
 const toast = useToast();
 const { $showAlert } = useNuxtApp();
 const contentEditable = ref(false);
-const { data: post, pending, refresh } = await useFetch(config.public.apiBase + '/api/post/' + route.params.id, {
-    server: false,
-});
+const { data: post, pending, refresh } = await useFetch(config.public.apiBase + '/api/post/' + route.params.id);
 
 const previewUrl = ref(null);
 const filename = ref(null);

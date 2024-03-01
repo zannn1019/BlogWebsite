@@ -45,7 +45,6 @@ const { data: categories, pending, refresh } = await useFetch(config.public.apiB
     query: {
         page
     },
-    server: false,
     watch: [page]
 });
 

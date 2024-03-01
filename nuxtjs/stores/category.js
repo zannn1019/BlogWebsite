@@ -14,10 +14,9 @@ export const useCategory = defineStore("category", () => {
                     Authorization: `Bearer ${useCookie('api_token').value}`
                 }
             });
-            // if (refresh) {
-            //     refresh()
-            // }
-            console.log(apiResponse);
+            if (refresh) {
+                refresh()
+            }
             $showAlert(apiResponse);
         } else {
             toast.add({

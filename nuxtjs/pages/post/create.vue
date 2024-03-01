@@ -68,9 +68,7 @@ definePageMeta({
 })
 
 const config = useRuntimeConfig();
-const { data: categories, pending } = await useFetch(config.public.apiBase + "/api/category", {
-    server: false
-});
+const { data: categories, pending } = await useFetch(config.public.apiBase + "/api/category");
 
 const { $showAlert } = useNuxtApp();
 const previewUrl = ref(null);

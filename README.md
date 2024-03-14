@@ -50,7 +50,7 @@ Before running this project, ensure you have the following installed:
 3. Install dependencies:
    composer install
 4. Configure environment variables:
-   - Create a `.env` file in the `backend` directory.
+   - Create a `.env` file in the `laravel` directory.
    - Copy the contents of `.env.example` to `.env`.
    - Modify the database connection settings to match your PostgreSQL configuration.
 5. Run database migrations:

@@ -1,6 +1,6 @@
-# Blog Website Without Authentication
+# Blog Website
 
-This is a simple blog website project that does not require authentication. It allows users to view blog posts and their details, as well as create new blog posts.
+This is a simple blog website project. It allows users to view blog posts and their details, as well as create new blog posts.
 
 ## Technologies Used
 

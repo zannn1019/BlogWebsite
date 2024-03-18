@@ -5,8 +5,7 @@
             <NuxtImg class="rounded-t-lg hover:scale-150 brightness-50 transition-all duration-300 hover:brightness-75"
                 :src="props.url" @click="showAction" width="500" height="375" crossorigin="anonymous"
                 :alt="props.category" />
-            <p class="font-bold text-white bg-transparent text-4xl z-10 absolute text-center" :contenteditable="action"
-                @input="handleInput">
+            <p class="font-bold text-white bg-transparent text-4xl z-10 absolute text-center" >
                 {{ props.category }}
             </p>
         </div>

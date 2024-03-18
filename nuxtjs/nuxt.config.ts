@@ -33,9 +33,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: "http://192.168.18.6:8000",
-      imgApi: "https://pixabay.com/api/",
-      imgKey: "42211442-39e4269efc52fe3580cef99d1",
+      apiBase: "http://127.0.0.1:8000",
     },
   },
   image: {

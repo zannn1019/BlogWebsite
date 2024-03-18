@@ -1,4 +1,4 @@
-version: '1.2'
+version: 3.1'
 services:
     laravel:
         container_name: laravel
@@ -42,4 +42,5 @@ services:
             - app_network
 
 networks:
-    app_network: {}
+    app_network: 
+        driver: bridge

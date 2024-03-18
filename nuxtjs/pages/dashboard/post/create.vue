@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col items-center">
+    <div class="py-12 flex flex-col items-center">
         <div class="w-11/12 max-lg:w-full">
             <h1 class="font-semibold text-3xl mb-10">Create a post</h1>
             <form @submit.prevent="postForm" class="flex gap-5 w-full h-full flex-col" enctype="multipart/form-data">
@@ -10,7 +10,7 @@
                         <option value="" selected>Choose a category</option>
                         <option value="" selected v-if="pending">Pending</option>
                         <option v-else v-for="cat in categories.data" :key="cat.id" :value="cat.id">{{
-                            cat.category }}
+                cat.category }}
                         </option>
                     </select>
                     <span class="text-sm">or <nuxt-link to="/categories" class="underline text-blue-500">
@@ -64,7 +64,8 @@
 
 <script setup>
 definePageMeta({
-    middleware: ['auth']
+    middleware: ['auth'],
+    layout: "dashboard-layout",
 })
 
 const config = useRuntimeConfig();
@@ -107,6 +108,7 @@ async function postForm() {
     formData.append('title', data.value.title);
     formData.append('content', data.value.content);
     formData.append('thumbnail', data.value.thumbnail);
+    formData.append('user_id', useCookie('user').value.id)
 
     const apiResponse = await $fetch(config.public.apiBase + "/api/post", {
         method: "POST",

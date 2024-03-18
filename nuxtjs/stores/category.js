@@ -28,11 +28,11 @@ export const useCategory = defineStore("category", () => {
     }
 
     async function update(categoryUuid, categoryName, refresh) {
-        const formData = new FormData();
-        formData.append('category', categoryName)
         const apiResponse = await $fetch(config.public.apiBase + "/api/category/" + categoryUuid, {
             method: "PATCH",
-            body: formData,
+            body: {
+                category: categoryName
+            },
             headers: {
                 Authorization: `Bearer ${useCookie('api_token').value}`
             }
@@ -42,5 +42,18 @@ export const useCategory = defineStore("category", () => {
         }
         $showAlert(apiResponse);
     }
-    return { add, update }
+
+    async function destroy(categoryUuid, refresh) {
+        const apiResponse = await $fetch(config.public.apiBase + "/api/category/" + categoryUuid, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${useCookie('api_token').value}`
+            }
+        });
+        if (refresh) {
+            refresh()
+        }
+        $showAlert(apiResponse);
+    }
+    return { add, update, destroy }
 })

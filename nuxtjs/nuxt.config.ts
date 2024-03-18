@@ -33,7 +33,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: "http://127.0.0.1:8000",
+      apiBase: "http://192.168.18.6:8000",
     },
   },
   image: {

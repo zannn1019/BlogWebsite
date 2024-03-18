@@ -6,28 +6,28 @@ services:
         build: ./laravel
         ports:
             - 8000:8000
-        networks: 
-            - app_network
+        networks:
+            - app
     db:
         image: postgres
         container_name: postgres
         volumes:
-        - ./postgresql/data:/var/lib/postgresql/data
+            - ./postgresql/data:/var/lib/postgresql/data
         ports:
-        - "5432:5432"
+            - "5432:5432"
         environment: 
             POSTGRES_DB: blog_nuxlara
             POSTGRES_USER: root 
             POSTGRES_PASSWORD: password 
-        networks: 
-            - app_network
+        networks:
+            - app
     nuxtjs:
         container_name: nuxtjs
         build: ./nuxtjs
         ports:
             - 3000:3000
-        networks: 
-            - app_network
+        networks:
+            - app
     pgadmin:
         image: dpage/pgadmin4
         container_name: pgAdmin
@@ -37,10 +37,8 @@ services:
             - db 
         environment:
             PGADMIN_DEFAULT_EMAIL: admin123@gmail.com
-            PGADMIN_DEFAULT_PASSWORD: password 
-        networks: 
-            - app_network
-
+            PGADMIN_DEFAULT_PASSWORD: password
+        networks:
+            - app
 networks:
-    app_network: 
-        driver: bridge
+    app: {}
